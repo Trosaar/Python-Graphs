@@ -44,7 +44,7 @@ class Graph:
             # if its not been visited
             if current_vertex not in visited_vertices:
                 # print the vertex
-                print("BFT", current_vertex)
+                # print("BFT", current_vertex)
                 # mark it as visited, (add it to visited_vertices)   
                 visited_vertices.add(current_vertex)
                 # add all unvisited neighbors to the queue
@@ -70,7 +70,7 @@ class Graph:
             # if its not been visited
             if current_vertex not in visited_vertices:
                 # print the vertex
-                print("DFT", current_vertex)
+                # print("DFT", current_vertex)
                 # mark it as visited, (add it to visited_vertices)   
                 visited_vertices.add(current_vertex)
                 # add all unvisited neighbors to the stack
@@ -94,32 +94,15 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-
-        # create a empty queue, and enqueue a PATH to the starting vertex
-        # queue.enqueue([starting_vertex])
-        # create a set for visited vertices
-        # while the queue is not empty
-            # dequeue the first PATH
-            # grab the last vertex in the path
-            # if it hasn't been visited 
-                # check if its the target 
-                    # Return the path 
-                # mark it as visited
-                # make new versions of the current path, with each neighbor added to them
-                    # duplicate the path
-                    # add the neighbor
-                    # add the new path to the queue
         plan_to_visit = Queue()
-        path_Q = Queue()
-        plan_to_visit.enqueue(starting_vertex)
-        path_Q.enqueue(starting_vertex)
+        plan_to_visit.enqueue([starting_vertex])
         # create a Set for visited_vertices
         visited_vertices = set()
         # while the plan_to_visit queue is not Empty:
         while plan_to_visit.size() > 0:
             # dequeue the first vertex on the queue
-            current_vertex = plan_to_visit.dequeue()
-            current_path = path_Q.dequeue()
+            current_path = plan_to_visit.dequeue()
+            current_vertex = current_path[-1]
             # if its not been visited
             if current_vertex is destination_vertex:
                 # print("BFS Path", current_path)
@@ -129,11 +112,11 @@ class Graph:
                 # mark it as visited, (add it to visited_vertices)   
                 visited_vertices.add(current_vertex)
                 # add all unvisited neighbors to the queue
-                if self.get_neighbors(current_vertex):
-                    for neighbor in self.get_neighbors(current_vertex):
-                        if neighbor not in visited_vertices:
-                            plan_to_visit.enqueue(neighbor)
-                            path_Q.enqueue([current_path] + [neighbor])
+                for neighbor in self.get_neighbors(current_vertex):
+                    if neighbor not in visited_vertices:
+                        next_path = list(current_path)
+                        next_path = next_path + [neighbor]
+                        plan_to_visit.enqueue(next_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -141,7 +124,30 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        plan_to_visit = Stack()
+        plan_to_visit.push([starting_vertex])
+        # create a Set for visited_vertices
+        visited_vertices = set()
+        # while the plan_to_visit queue is not Empty:
+        while plan_to_visit.size() > 0:
+            # dequeue the first vertex on the queue
+            current_path = plan_to_visit.pop()
+            current_vertex = current_path[-1]
+            # if its not been visited
+            if current_vertex is destination_vertex:
+                # print("BFS Path", current_path)
+                return current_path
+
+            if current_vertex not in visited_vertices:
+                # mark it as visited, (add it to visited_vertices)   
+                visited_vertices.add(current_vertex)
+                # add all unvisited neighbors to the queue
+                for neighbor in self.get_neighbors(current_vertex):
+                    if neighbor not in visited_vertices:
+                        next_path = list(current_path)
+                        next_path = next_path + [neighbor]
+                        plan_to_visit.push(next_path)
+
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
